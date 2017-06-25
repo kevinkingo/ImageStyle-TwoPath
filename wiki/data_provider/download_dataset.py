@@ -2,7 +2,11 @@ import csv
 import requests
 import sys, time
 import threading
-import os.path
+import os
+
+savepath = 'images/'
+if not os.path.exists(savepath):
+    os.makedirs(savepath)
 
 thread_total = 5
 time_step = 30
@@ -40,12 +44,12 @@ class Download(threading.Thread):
         print "Thread " + str(self.thread_num) + " start!"
 
         for key in self.download_list:
-            if os.path.isfile(key + ".jpg"):
+            if os.path.isfile(savepath + key + ".jpg"):
                 self.num += 1
                 continue
             try:
                 r = requests.get(url_list[key])
-                with open(key + ".jpg", "wb") as f:
+                with open(savepath + key + ".jpg", "wb") as f:
                     f.write(r.content)
             except:
                 self.error_list.append(key)

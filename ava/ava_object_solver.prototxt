@@ -1,0 +1,21 @@
+net: "./ava_object_model.prototxt"
+display: 1000
+average_loss: 1000
+test_interval: 1000
+test_iter: 500
+
+base_lr: 1e-4
+momentum: 0.9
+weight_decay: 0.0001
+
+lr_policy: "multistep"
+gamma: 0.1
+stepvalue: 8000
+stepvalue: 13000
+stepvalue: 16000
+
+max_iter: 20000
+snapshot: 10000
+snapshot_prefix: "./models/ava_object"
+solver_mode: GPU
+test_initialization: false

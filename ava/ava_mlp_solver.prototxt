@@ -1,0 +1,20 @@
+net: "./ava_mlp_model.prototxt"
+display: 1500
+average_loss: 1500
+test_interval: 1500
+test_iter: 90
+
+base_lr: 0.002
+momentum: 0.9
+weight_decay: 0.0001
+
+lr_policy: "multistep"
+gamma: 0.1
+stepvalue: 45000 
+stepvalue: 75000 
+
+max_iter: 90000
+snapshot: 30000
+snapshot_prefix: "./models/ava_mlp"
+solver_mode: GPU
+test_initialization: false
