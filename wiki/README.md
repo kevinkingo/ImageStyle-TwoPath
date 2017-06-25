@@ -6,3 +6,4 @@ The step for training Wikipainting Dataset is as follows:
 1. run `data_provider/generate_wiki_data.py` to crop and pack images into lmdb.
 1. run `models/download.sh` to download VGG19 model.
 1. run `wiki_run.sh` to train OPN, TPN, and MNet.
+1. run `wiki_test_XXX.py` to test OPN, TPN and MNet.
