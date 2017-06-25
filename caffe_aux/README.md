@@ -15,4 +15,4 @@ message GramParameter {
 ```
 optional GramParameter gram_param = 145;
 ```
-1. Recompile caffe
+4. Recompile caffe

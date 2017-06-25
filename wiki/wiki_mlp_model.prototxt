@@ -1,0 +1,169 @@
+name: "ImageStyle_TwoPath"
+layer {
+  name: "data"
+  type: "Data"
+  top: "data"
+  top: "label"
+  data_param {
+    source: "./data/wiki-train-feature-lmdb"
+    batch_size: 128
+    backend: LMDB   
+  }
+  include {
+    phase: TRAIN
+  }
+}
+layer {
+  name: "data"
+  type: "Data"
+  top: "data"
+  top: "label"
+  data_param {
+    source: "./data/wiki-validate-feature-lmdb"
+    batch_size: 128
+    backend: LMDB   
+  }
+  include {
+    phase: TEST
+  }
+}
+
+layer {
+  name: "normal"
+  type: "MVN"
+  bottom: "data"
+  top: "gram_norm"
+  mvn_param {
+    across_channels: true
+  }
+}
+layer {
+  name: "scale"
+  type: "Scale"
+  bottom: "gram_norm"
+  top: "gram_scale"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "gram_inner1"
+  type: "InnerProduct"
+  bottom: "gram_scale"
+  top: "gram_fc1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 2048
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "gram_relu1"
+  type: "ReLU"
+  bottom: "gram_fc1"
+  top: "gram_fc1"
+}
+layer {
+  name: "gram_drop1"
+  type: "Dropout"
+  bottom: "gram_fc1"
+  top: "gram_fc1"
+  dropout_param {
+    dropout_ratio: 0.75
+  }
+}
+layer {
+  name: "gram_inner2"
+  type: "InnerProduct"
+  bottom: "gram_fc1"
+  top: "gram_fc2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 1024
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "gram_relu2"
+  type: "ReLU"
+  bottom: "gram_fc2"
+  top: "gram_fc2"
+}
+layer {
+  name: "gram_drop2"
+  type: "Dropout"
+  bottom: "gram_fc2"
+  top: "gram_fc2"
+  dropout_param {
+    dropout_ratio: 0.75
+  }
+}
+layer {
+  name: "gram_inner3"
+  type: "InnerProduct"
+  bottom: "gram_fc2"
+  top: "gram_fc3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 25
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "gram_fc3"
+  bottom: "label"
+  top: "loss"
+}
+layer {
+  name: "acc"
+  type: "Accuracy"
+  bottom: "gram_fc3"
+  bottom: "label"
+  top: "acc"
+}

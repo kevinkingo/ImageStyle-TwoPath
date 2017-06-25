@@ -1,0 +1,20 @@
+net: "./wiki_full_model.prototxt"
+display: 2000
+average_loss: 2000
+test_interval: 2000
+test_iter: 1000
+
+base_lr: 1e-4
+momentum: 0.9
+weight_decay: 0.0001
+
+lr_policy: "multistep"
+gamma: 0.1
+stepvalue: 16000 
+stepvalue: 24000 
+
+max_iter: 30000
+snapshot: 10000
+snapshot_prefix: "./models/wiki_full"
+solver_mode: GPU
+test_initialization: false
